@@ -9,6 +9,8 @@ import com.github.steanky.ethylene.mapper.MappingProcessorSource;
 import com.github.steanky.ethylene.mapper.signature.ScalarSignature;
 import com.github.steanky.ethylene.mapper.type.Token;
 import io.github.cottonmc.cotton.gui.client.CottonClientScreen;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import me.x150.renderer.event.RenderEvents;
 import me.x150.renderer.render.Renderer3d;
 import net.fabricmc.api.ClientModInitializer;
@@ -76,6 +78,7 @@ public class MapeditorClient implements ClientModInitializer {
         KeyParser keyParser = new BasicKeyParser(Namespaces.PHANTAZM);
 
         MappingProcessorSource mappingProcessorSource = Signatures.core(MappingProcessorSource.builder())
+            .withTypeImplementation(IntOpenHashSet.class, IntSet.class)
             .withScalarSignature(ScalarSignature.of(Token.ofClass(Key.class),
                 element -> keyParser.parseKey(element.asString()),
                 key -> key == null ? ConfigPrimitive.NULL : ConfigPrimitive.of(key.asString())))
@@ -84,7 +87,9 @@ public class MapeditorClient implements ClientModInitializer {
         Loader<MapInfo> mapInfoLoader = MapLoader.mapInfoLoader(defaultMapDirectory, codec, mappingProcessorSource
             .processorFor(Token.ofClass(MapInfo.class)));
 
-        EditorSession editorSession = new BasicEditorSession(renderer, mapInfoLoader, defaultMapDirectory);
+        MapWriter mapInfoWriter = new MapWriter(codec, mappingProcessorSource);
+        EditorSession editorSession = new BasicEditorSession(renderer, mapInfoLoader, mapInfoWriter,
+            defaultMapDirectory);
         editorSession.loadMapsFromDisk();
 
         UseBlockCallback.EVENT.register(editorSession::handleBlockUse);
@@ -155,7 +160,7 @@ public class MapeditorClient implements ClientModInitializer {
             }
         });
 
-        ClientLifecycleEvents.CLIENT_STOPPING.register(unused -> editorSession.saveMapsToDisk());
+        ClientLifecycleEvents.CLIENT_STOPPING.register(unused -> editorSession.synchronizeMaps());
     }
 
     private static class Renderer implements ObjectRenderer {

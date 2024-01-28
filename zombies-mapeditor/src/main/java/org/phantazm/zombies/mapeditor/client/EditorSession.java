@@ -162,9 +162,14 @@ public interface EditorSession {
     void loadMapsFromDisk();
 
     /**
-     * Saves all maps to disk, overwriting any changes there.
+     * Saves all maps to disk, overwriting any changes there. Deletes maps that do not exist.
      */
-    void saveMapsToDisk();
+    void synchronizeMaps();
+
+    /**
+     * Writes all changes to disk, overwriting maps that already exist, but does not delete maps that no longer exist.
+     */
+    void saveMaps();
 
     /**
      * Sets the last room edited in this session. Used to autofill name information, when necessary.

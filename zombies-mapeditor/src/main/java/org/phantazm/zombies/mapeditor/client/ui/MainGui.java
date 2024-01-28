@@ -124,7 +124,7 @@ public class MainGui extends SimplePanelGui {
             }
         });
 
-        save.setOnClick(session::saveMapsToDisk);
+        save.setOnClick(session::synchronizeMaps);
         load.setOnClick(() -> {
             MinecraftClient.getInstance().setScreen(new CottonClientScreen(
                 new ConfirmationGui(Text.translatable(TranslationKeys.GUI_MAPEDITOR_OVERWRITE_MAP_QUERY),

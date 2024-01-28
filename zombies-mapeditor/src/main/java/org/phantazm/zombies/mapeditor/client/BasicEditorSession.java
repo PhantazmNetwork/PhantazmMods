@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.phantazm.commons.FileUtils;
 import org.phantazm.commons.Namespaces;
 import org.phantazm.loader.Loader;
 import org.phantazm.zombies.map.*;
@@ -26,8 +27,10 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Basic implementation of {@link EditorSession}.
@@ -62,6 +65,7 @@ public class BasicEditorSession implements EditorSession {
     private final ObjectRenderer renderer;
     private final Path mapFolder;
     private final Loader<MapInfo> loader;
+    private final MapWriter mapWriter;
     private final Map<Key, MapInfo> maps;
     private final Map<Key, MapInfo> unmodifiableMaps;
     private RoomInfo lastRoom;
@@ -80,10 +84,11 @@ public class BasicEditorSession implements EditorSession {
      * @param mapFolder the {@link Path} which contains saved map data
      */
     public BasicEditorSession(@NotNull ObjectRenderer renderer, @NotNull Loader<MapInfo> loader,
-        @NotNull Path mapFolder) {
+        @NotNull MapWriter writer, @NotNull Path mapFolder) {
         this.renderer = Objects.requireNonNull(renderer);
         this.mapFolder = Objects.requireNonNull(mapFolder);
         this.loader = Objects.requireNonNull(loader);
+        this.mapWriter = Objects.requireNonNull(writer);
         this.maps = new HashMap<>();
         this.unmodifiableMaps = Collections.unmodifiableMap(maps);
     }
@@ -289,34 +294,49 @@ public class BasicEditorSession implements EditorSession {
     }
 
     @Override
-    public void saveMapsToDisk() {
-        //TODO: add ability to save data stored in the new Loader(?)
-        /*
-        Set<String> savedMaps = new HashSet<>(maps.values().size());
-        for (MapInfo map : maps.values()) {
-            try {
-                loader.save(map);
-                savedMaps.add(map.settings().id().value());
-            } catch (IOException e) {
-                LOGGER.warn("Error when trying to save map " + map.settings().id(), e);
+    public void synchronizeMaps() {
+        try {
+            try (Stream<Path> files = Files.list(mapFolder)) {
+                Iterator<Path> pathIterator = files.iterator();
+                while (pathIterator.hasNext()) {
+                    Path map = pathIterator.next();
+                    if (!Files.isDirectory(map)) {
+                        continue;
+                    }
+
+                    String name = map.getFileName().toString();
+
+                    boolean exists = false;
+                    for (Key key : maps.keySet()) {
+                        if (key.value().equalsIgnoreCase(name)) {
+                            exists = true;
+                            break;
+                        }
+                    }
+
+                    if (!exists) {
+                        FileUtils.deleteRecursivelyIfExists(map);
+                    }
+                }
             }
         }
+        catch (IOException e) {
+            LOGGER.warn("Error searching for or while deleting removed map(s)", e);
+        }
 
-        try {
-            FileUtils.forEachFileMatching(mapFolder, (path, attr) -> attr.isDirectory() && !path.equals(mapFolder) &&
-                !savedMaps.contains(path.getFileName().toString()), mapFolder -> {
-                String name = mapFolder.getFileName().toString();
+        saveMaps();
+    }
 
-                try {
-                    loader.delete(name);
-                    LOGGER.info("Successfully deleted map " + name);
-                } catch (IOException e) {
-                    LOGGER.warn("IOException when deleting map " + name, e);
-                }
-            });
-        } catch (IOException e) {
-            LOGGER.warn("IOException when deleting maps", e);
-        }*/
+    @Override
+    public void saveMaps() {
+        for (Map.Entry<Key, MapInfo> mapEntry : maps.entrySet()) {
+            try {
+                mapWriter.writeMap(mapEntry.getValue(), mapFolder);
+            }
+            catch (IOException e) {
+                LOGGER.warn("Error saving map {}", mapEntry.getKey().key(), e);
+            }
+        }
     }
 
     @Override
