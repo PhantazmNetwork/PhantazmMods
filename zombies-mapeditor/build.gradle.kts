@@ -8,7 +8,7 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-version = "1.4.0+1.19.4"
+version = "1.5.0+1.19.4"
 
 base {
     archivesName.set("phantazm-zombies-mapeditor")
