@@ -71,6 +71,7 @@ public class BasicEditorSession implements EditorSession {
     private RoomInfo lastRoom;
     private DoorInfo lastDoor;
     private Key lastSpawnrule;
+    private boolean lastLinkToWindowToggle;
     private boolean enabled;
     private Vec3i firstSelected;
     private Vec3i secondSelected;
@@ -91,6 +92,8 @@ public class BasicEditorSession implements EditorSession {
         this.mapWriter = Objects.requireNonNull(writer);
         this.maps = new HashMap<>();
         this.unmodifiableMaps = Collections.unmodifiableMap(maps);
+
+        this.lastLinkToWindowToggle = true;
     }
 
     @Override
@@ -337,6 +340,16 @@ public class BasicEditorSession implements EditorSession {
                 LOGGER.warn("Error saving map {}", mapEntry.getKey().key(), e);
             }
         }
+    }
+
+    @Override
+    public boolean getLastLinkToWindow() {
+        return lastLinkToWindowToggle;
+    }
+
+    @Override
+    public void setLastLinkToWindow(boolean toggle) {
+        this.lastLinkToWindowToggle = toggle;
     }
 
     @Override

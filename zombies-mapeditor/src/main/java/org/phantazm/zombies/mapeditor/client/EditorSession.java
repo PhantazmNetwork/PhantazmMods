@@ -171,6 +171,10 @@ public interface EditorSession {
      */
     void saveMaps();
 
+    boolean getLastLinkToWindow();
+
+    void setLastLinkToWindow(boolean toggle);
+
     /**
      * Sets the last room edited in this session. Used to autofill name information, when necessary.
      *

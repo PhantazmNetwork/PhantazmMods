@@ -41,7 +41,7 @@ public class NewSpawnpointGui extends NamedObjectGui {
         super.gridPanelRoot.setSize(200, 120);
 
         this.toggleButtonLinkWindow = new WToggleButton(Text.translatable(TranslationKeys.GUI_MAPEDITOR_LINK_WINDOW));
-        this.toggleButtonLinkWindow.setToggle(true);
+        this.toggleButtonLinkWindow.setToggle(session.getLastLinkToWindow());
 
         MapInfo currentMap = session.getMap();
         Vec3I firstSelected = session.getFirstSelection();
@@ -60,7 +60,6 @@ public class NewSpawnpointGui extends NamedObjectGui {
             linkTarget = null;
         }
 
-
         toggleButtonLinkWindow.setOnToggle(state -> {
             if (state) {
                 if (linkTarget != null) {
@@ -73,8 +72,10 @@ public class NewSpawnpointGui extends NamedObjectGui {
             } else {
                 this.linkDisplayLabel.setText(Text.of(StringUtils.EMPTY));
             }
+
+            session.setLastLinkToWindow(state);
         });
-        Objects.requireNonNull(toggleButtonLinkWindow.getOnToggle()).accept(true);
+        Objects.requireNonNull(toggleButtonLinkWindow.getOnToggle()).accept(session.getLastLinkToWindow());
 
         buttonAdd.setOnClick(() -> {
             String value = textFieldName.getText();
