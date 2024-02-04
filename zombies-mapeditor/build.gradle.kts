@@ -75,7 +75,7 @@ dependencies {
         }
     }
 
-    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.loader.oneNineteen)
     modImplementation(libs.libgui)
     modImplementation(libs.fabric.api.oneNineteen)
     modImplementation(libs.renderer)

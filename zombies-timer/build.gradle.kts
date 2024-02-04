@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.fabric.loom)
 }
 
-version = "0.2.1+1.20.1"
+version = "0.2.1+1.20.4"
 
 base {
     archivesName.set("zombies-autosplits")
@@ -56,7 +56,7 @@ dependencies {
         }
     }
 
-    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.loader.oneTwenty)
     modImplementation(libs.fabric.api.oneTwenty)
     modImplementation(libs.modmenu)
     modImplementation(libs.cloth.config)

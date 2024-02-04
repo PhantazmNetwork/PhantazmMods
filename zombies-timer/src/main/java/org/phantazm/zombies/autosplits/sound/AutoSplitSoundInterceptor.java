@@ -1,6 +1,7 @@
 package org.phantazm.zombies.autosplits.sound;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -29,11 +30,12 @@ public class AutoSplitSoundInterceptor implements ClientSoundCallback {
     }
 
     private boolean isOnHypixel() {
-        if (client.player == null) {
+        ClientPlayNetworkHandler networkHandler = client.getNetworkHandler();
+        if (networkHandler == null) {
             return false;
         }
 
-        String brand = client.player.getServerBrand();
+        String brand = networkHandler.getBrand();
         return brand != null && brand.contains("Hypixel");
     }
 

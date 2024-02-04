@@ -24,7 +24,7 @@ examination-string = { module = "net.kyori:examination-string", version.ref = "e
 
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "3.1.8" }
 
-cloth-config = { module = "me.shedaniel.cloth:cloth-config-fabric", version = "11.1.106" }
+cloth-config = { module = "me.shedaniel.cloth:cloth-config-fabric", version = "13.0.121" }
 commons = { module = "org.phantazm:commons", version = "1.0-SNAPSHOT" }
 
 element-core = { module = "com.github.steanky:element-core", version = "0.16.0" }
@@ -33,9 +33,10 @@ ethylene-core = { module = "com.github.steanky:ethylene-core", version.ref = "et
 ethylene-mapper = { module = "com.github.steanky:ethylene-mapper", version.ref = "ethylene" }
 ethylene-yaml = { module = "com.github.steanky:ethylene-yaml", version.ref = "ethylene" }
 
-fabric-loader = { module = "net.fabricmc:fabric-loader", version = "0.14.21" }
+fabric-loader-oneNineteen = { module = "net.fabricmc:fabric-loader", version = "0.14.21" }
+fabric-loader-oneTwenty = { module = "net.fabricmc:fabric-loader", version = "0.14.23" }
 fabric-api-oneNineteen = { module = "net.fabricmc.fabric-api:fabric-api", version = "0.83.0+1.19.4" }
-fabric-api-oneTwenty = { module = "net.fabricmc.fabric-api:fabric-api", version = "0.85.0+1.20.1" }
+fabric-api-oneTwenty = { module = "net.fabricmc.fabric-api:fabric-api", version = "0.91.1+1.20.4" }
 
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
 
@@ -46,11 +47,11 @@ libgui = { module = "io.github.cottonmc:LibGui", version = "7.1.0+1.19.4" }
 
 minecraft-oneNineteen = { module = "com.mojang:minecraft", version = "1.19.4" }
 
-minecraft-oneTwenty = { module = "com.mojang:minecraft", version = "1.20.1" }
+minecraft-oneTwenty = { module = "com.mojang:minecraft", version = "1.20.4" }
 
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version = "4.7.0" }
 
-modmenu = { module = "com.terraformersmc:modmenu", version = "7.1.0" }
+modmenu = { module = "com.terraformersmc:modmenu", version = "9.0.0" }
 
 renderer = { module = "com.github.0x3C50:Renderer", version = "e1bb03f45e" }
 
@@ -65,7 +66,7 @@ yaml = { module = "org.snakeyaml:snakeyaml-engine", version = "2.3" }
 
 yarn-mappings-oneNineteen = { module = "net.fabricmc:yarn", version = "1.19.4+build.2" }
 
-yarn-mappings-oneTwenty = { module = "net.fabricmc:yarn", version = "1.20.1+build.9" }
+yarn-mappings-oneTwenty = { module = "net.fabricmc:yarn", version = "1.20.4+build.1" }
 
 [plugins]
 fabric-loom = { id = "fabric-loom", version = "1.4-SNAPSHOT" }
